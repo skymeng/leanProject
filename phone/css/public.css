@@ -1,0 +1,16 @@
+/**
+ * 移动端公共样式  整个页面用rem或者百分比布局
+ */
+body{
+	font-family:Helvetica;
+	-webkit-text-size-adjust: 100%!important;
+}
+a,button,input,textarea{-webkit-tap-highlight-color: rgba(0,0,0,0;)}
+
+
+
+
+
+
+
+

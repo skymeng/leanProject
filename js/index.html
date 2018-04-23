@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+<script type="text/javascript">
+    if($('#label-noinfo').length > 0) {
+        $('#label-noinfo').click(function(){
+            var flag = $('#no-adver').val();
+            if(flag == 1) {
+                $.get('/cancel',{ha:flag},function(data){
+                    if(data == 'no') $('.ad-wrapper').hide();
+                });
+            }
+
+        });
+
+        $('.icon-close').click(function(){
+            $('.ad-wrapper').hide();
+        });
+        $('.ad-wrapper').click(function(e){
+            e.stopPropagation();
+            if(e.target.className === 'ad-wrapper') {
+                $('.ad-wrapper').hide();
+            }
+        });
+    }
+
+    $('#slider').nivoSlider({
+        effect: 'boxRandom',   // 效果
+        animSpeed: 500,        // 动画速度
+        pauseTime: 3000,       // 暂停时间
+        slices: 10,            // 分为10列
+    });
+    // 设置小圆点偏移值，使居中
+    var  sliderOffset = $(".nivo-controlNav").width()*(-0.5)-16;
+    $(".nivo-controlNav").css("marginLeft",sliderOffset);
+
+	//下载附件
+	//p-down0: 已验证注册用户
+    //p-down1: 未登录用户
+    //p-down2: 未验证用户，可下载
+    //p-down3: 未验证用户，不可下载
+
+    $("a[name='p-down0']").click(function(){
+        var url = $(this).attr("src");
+        globalTip({'msg':'正在为您准备下载','setTime':2});
+        updateTime();
+        window.open(url);
+        return false;
+    });
+
+    $("a[name='p-down1']").click(function(){
+        globalTip({'msg':'请登录后再下载素材','setTime':3,'URL':'http://ui.cn/login.html','jump':true});
+        return false;
+    });
+
+    $("a[name='p-down2']").click(function(){
+        var url = $(this).attr("src");
+        globalTip({'msg':'您的邮箱或电话还未进行验证，每小时仅可下载1个素材','setTime':3});
+        updateTime();
+        window.open(url);
+        return false;
+    });
+
+    $("a[name='p-down3']").click(function(){
+        globalTip({'msg':'您的邮箱或电话还未进行验证，每小时仅可下载1个素材','setTime':3,'URL':'http://account.ui.cn/accountinfo.html','jump':true});
+        return false;
+    });
+
+    function updateTime() {
+        $.ajax({
+            url:"http://ui.cn/updateLastDownloadTime",
+            type:'post',
+            data:{ time:0 },
+            dataType:'JSONP',
+            success:function(data){
+                globalTip({"msg":"开始下载","setTime":3});
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                globalTip({"msg":"下载错误,请重试！","setTime":3});
+            },
+
+        });
+    }
+</script>
+
+</body>
+</html>
